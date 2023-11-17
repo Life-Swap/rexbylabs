@@ -14,7 +14,7 @@ import {
   isPlainObject,
 } from "./utils";
 
-export type * from "./types";
+export * from "./types";
 
 const createIterator = (blocks: DraftjsBlock[]): BlockIterator => {
   let i = 0;
