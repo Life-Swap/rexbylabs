@@ -26,7 +26,7 @@ export interface DraftjsLinkEntity {
 
 export interface DraftjsMentionEntity {
   type: "mention";
-  data: Record<string, unknown>;
+  data: Record<string, any>;
 }
 
 export type DraftjsEntityType = DraftjsLinkEntity | DraftjsMentionEntity;
@@ -50,4 +50,10 @@ export interface Config {
     content: unknown[];
   };
   unknownMarkTypeHandler?: (mark: unknown) => { type: string };
+}
+
+export interface Context {
+  config: Config;
+  iterator: BlockIterator;
+  entityMap: DraftjsEntityType[];
 }

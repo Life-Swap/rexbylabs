@@ -1,6 +1,6 @@
 {
   "name": "@rexby/draftjs-to-tiptap",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "draftjs to tiptap markup converter",
   "keywords": [
     "tiptap",
@@ -23,7 +23,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "clean": "rm -rf ./lib",
+    "clean": "rm -r ./lib",
     "test": "jest",
     "prepublish": "yarn test && yarn clean && yarn build"
   }

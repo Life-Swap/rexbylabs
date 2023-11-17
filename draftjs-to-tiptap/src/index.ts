@@ -1,9 +1,9 @@
 import type {
+  Context,
   BlockIterator,
   Config,
   DraftjsBlock,
   DraftjsEntityRange,
-  DraftjsEntityType,
 } from "./types";
 import {
   uniq,
@@ -14,11 +14,7 @@ import {
   isPlainObject,
 } from "./utils";
 
-interface Context {
-  config: Config;
-  iterator: BlockIterator;
-  entityMap: DraftjsEntityType[];
-}
+export type * from "./types";
 
 const createIterator = (blocks: DraftjsBlock[]): BlockIterator => {
   let i = 0;
@@ -71,7 +67,7 @@ export const draftjsToTiptap = (
   };
 };
 
-const draftJsBlockToTiptap = (block: DraftjsBlock, ctx: Context) => {
+export const draftJsBlockToTiptap = (block: DraftjsBlock, ctx: Context) => {
   switch (block.type) {
     case "header-one":
       return draftJsHeadingToTiptap(block, 1, ctx);
@@ -102,9 +98,15 @@ const draftJsBlockToTiptap = (block: DraftjsBlock, ctx: Context) => {
         "orderedList",
         "ordered-list-item"
       );
-
     case "blockquote":
+      return draftjsTextToTiptapNode("blockquote", block, ctx);
     case "code-block":
+      return {
+        ...draftjsTextToTiptapNode("codeBlock", block, ctx),
+        attrs: {
+          language: null,
+        },
+      };
   }
 
   if (ctx.config.unknownBlockTypeHandler) {
@@ -119,7 +121,7 @@ const draftJsBlockToTiptap = (block: DraftjsBlock, ctx: Context) => {
   return null;
 };
 
-const draftjsTextToTiptapNode = (
+export const draftjsTextToTiptapNode = (
   type: string,
   block: DraftjsBlock,
   ctx: Context
@@ -128,7 +130,10 @@ const draftjsTextToTiptapNode = (
   content: draftjsTextToTiptapContent(block, ctx),
 });
 
-const draftjsTextToTiptapContent = (block: DraftjsBlock, ctx: Context) => {
+export const draftjsTextToTiptapContent = (
+  block: DraftjsBlock,
+  ctx: Context
+) => {
   return draftjsTextToTiptap(block, ctx).map((node) => {
     const mention = node.marks?.filter(
       (mark): mark is ReturnType<typeof draftjsEntityToTiptapMark> =>
@@ -140,7 +145,7 @@ const draftjsTextToTiptapContent = (block: DraftjsBlock, ctx: Context) => {
   });
 };
 
-const draftJsListToTiptap = (
+export const draftJsListToTiptap = (
   block: DraftjsBlock,
   ctx: Context,
   toType: string,
@@ -162,7 +167,7 @@ const draftJsListToTiptap = (
   };
 };
 
-const draftJsHeadingToTiptap = (
+export const draftJsHeadingToTiptap = (
   block: DraftjsBlock,
   level: number,
   ctx: Context
@@ -209,7 +214,10 @@ export const draftjsTextToTiptap = (block: DraftjsBlock, ctx: Context) => {
   });
 };
 
-const draftjsEntityToTiptapMark = (range: DraftjsEntityRange, ctx: Context) => {
+export const draftjsEntityToTiptapMark = (
+  range: DraftjsEntityRange,
+  ctx: Context
+) => {
   const entityType = ctx.entityMap[range.key];
 
   switch (entityType.type) {
