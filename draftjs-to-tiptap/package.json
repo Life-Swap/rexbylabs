@@ -1,6 +1,6 @@
 {
   "name": "@rexby/draftjs-to-tiptap",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "draftjs to tiptap markup converter",
   "keywords": [
     "tiptap",
