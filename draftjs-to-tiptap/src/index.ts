@@ -178,11 +178,13 @@ export const draftJsHeadingToTiptap = (
 });
 
 export const draftjsTextToTiptap = (block: DraftjsBlock, ctx: Context) => {
+  const { inlineStyleRanges = [], entityRanges = [] } = block;
+
   const splits = uniq(
     [
       0,
       ulength(block.text),
-      ...[...block.inlineStyleRanges, ...block.entityRanges].flatMap((x) => [
+      ...[...inlineStyleRanges, ...entityRanges].flatMap((x) => [
         x.offset,
         x.offset + x.length,
       ]),
@@ -196,12 +198,12 @@ export const draftjsTextToTiptap = (block: DraftjsBlock, ctx: Context) => {
     const marks = [
       // Links and mentions. Note that tiptap doesn't store mentions as marks,
       // it will get converted to a tiptap node in draftjsTextToTiptapContent
-      ...block.entityRanges
+      ...entityRanges
         .filter((x) => overlaps(start, end, x.offset, x.offset + x.length))
         .map((x) => draftjsEntityToTiptapMark(x, ctx)),
 
       // bold, italic etc.
-      ...block.inlineStyleRanges
+      ...inlineStyleRanges
         .filter((x) => overlaps(start, end, x.offset, x.offset + x.length))
         .map((x) => ({ type: x.style.toLowerCase() })),
     ].filter(isDefined);

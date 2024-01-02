@@ -13,8 +13,8 @@ export interface DraftjsEntityRange {
 export interface DraftjsBlock {
   type: string;
   text: string;
-  inlineStyleRanges: DraftjsInlineRange[];
-  entityRanges: DraftjsEntityRange[];
+  inlineStyleRanges?: DraftjsInlineRange[];
+  entityRanges?: DraftjsEntityRange[];
 }
 
 export interface DraftjsLinkEntity {
